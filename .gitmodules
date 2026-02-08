@@ -1,0 +1,3 @@
+[submodule "3rdparty/quill"]
+	path = 3rdparty/quill
+	url = https://github.com/odygrd/quill.git
