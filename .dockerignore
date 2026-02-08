@@ -1,0 +1,16 @@
+# Build artifacts and local data
+build/
+data/
+.cache/
+
+# IDE and tools
+.vscode/
+*.swp
+*.swo
+
+# Keep .git for submodule init (do not ignore)
+# .git is required for git submodule update
+
+# Other
+*.log
+.DS_Store

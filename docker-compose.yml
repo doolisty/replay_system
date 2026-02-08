@@ -1,0 +1,38 @@
+# ReplaySystem - Cross-platform build, run, and test
+# See comments below or README for usage
+
+services:
+  # Main service: build image and run all tests by default
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-ubuntu:22.04}
+    image: replaysystem:latest
+    # Default: run all tests (basic, recovery, consistency, stress)
+    command: ["/bin/bash", "-c", "cd /app/build && /app/scripts/run_test.sh --all"]
+    volumes:
+      # Optional: mount data dir to host to persist recordings
+      - replay_data:/app/data
+    # Run main program (override command):
+    #   docker compose run --rm app /app/build/replay_system --mode=test --messages=10000 --data-dir=/app/data
+    # Run basic tests only:
+    #   docker compose run --rm app /bin/bash -c "cd /app/build && /app/scripts/run_test.sh --basic"
+    # Shell for debugging:
+    #   docker compose run --rm app /bin/bash
+
+  # Build only (no tests), e.g. for CI or compile check
+  build-only:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-ubuntu:22.04}
+    image: replaysystem:latest
+    command: ["/bin/bash", "-c", "echo 'Build already done in image.' && ls -la /app/build/"]
+    profiles:
+      - build
+
+volumes:
+  replay_data:
